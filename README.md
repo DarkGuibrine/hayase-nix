@@ -55,7 +55,7 @@ home.packages = [ hayase.packages.${pkgs.system}.default ];
 Build or run the packaged AppImage directly from the command line:
 
 ```bash
-nix build github:DarkkGuibrine/hayase-nix#default
+nix build github:DarkGuibrine/hayase-nix#default
 nix run github:DarkGuibrine/hayase-nix#default
 ```
 
