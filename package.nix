@@ -9,7 +9,7 @@
 
   src = fetchurl {
     url = "https://github.com/hayase-app/docs/releases/download/v${version}/linux-hayase-${version}-linux.AppImage";
-    hash = "sha256:7fXu8ySC8FioLA1PlyorS6F7Kv34nlo8Djhj54kCEOI";
+    hash = "sha256-7fXu8ySC8FioLA1PlyorS6F7Kv34nlo8Djhj54kCEOI";
   };
 
   appimageContents = appimageTools.extractType2 {
