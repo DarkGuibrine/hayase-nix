@@ -5,11 +5,11 @@
   appimageTools,
 }: let
   pname = "hayase";
-  version = "6.4.44";
+  version = "6.4.45";
 
   src = fetchurl {
     url = "https://github.com/hayase-app/docs/releases/download/v${version}/linux-hayase-${version}-linux.AppImage";
-    hash = "sha256-qzHjpeN6iNb+Wxi6ttVDMkxPSSqLts4QFkAVpBSwpv0=";
+    hash = "sha256-CeCI3OwotJW5LMvQnp9NJMceZDrSxaf0eT87EJpG368=";
   };
 
   appimageContents = appimageTools.extractType2 {
