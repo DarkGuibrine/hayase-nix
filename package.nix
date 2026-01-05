@@ -1,43 +1,38 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-}: let
+  pkgs,
+  ...
+}:
+pkgs.appimageTools.wrapType2 rec {
   pname = "hayase";
   version = "6.4.46";
 
-  src = fetchurl {
+  src = pkgs.fetchurl {
     url = "https://api.hayase.watch/files/linux-hayase-${version}-linux.AppImage";
-    hash = "sha256-QvuxWtkcZbC94e7BcpTnFrhEZNItLJQQqUFODzJ83HA="; 
+    hash = "sha256-QvuxWtkcZbC94e7BcpTnFrhEZNItLJQQqUFODzJ83HA=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
+  nativeBuildInputs = with pkgs; [
+    makeWrapper
+  ];
+
+  extraInstallCommands = let
+    contents = pkgs.appimageTools.extractType2 {inherit pname version src;};
+  in ''
+    mkdir -p "$out/share/applications"
+    mkdir -p "$out/share/lib/hayase"
+    cp -r ${contents}/{locales,resources} "$out/share/lib/hayase"
+    cp -r ${contents}/usr/share/* "$out/share"
+    cp "${contents}/${pname}.desktop" "$out/share/applications/"
+    wrapProgram $out/bin/hayase --add-flags "--ozone-platform=wayland"
+    substituteInPlace $out/share/applications/${pname}.desktop --replace-fail 'Exec=AppRun' 'Exec=${meta.mainProgram}'
+  '';
+
+  meta = {
+    description = "Hayase - Torrent streaming made simple";
+    homepage = "https://hayase.watch";
+    changelog = "https://hayase.watch/changelog";
+    license = lib.licenses.bsl11;
+    mainProgram = "hayase";
   };
-in
-  appimageTools.wrapType2 {
-    inherit pname version src;
-
-    extraInstallCommands = ''
-      install -Dm444 ${appimageContents}/hayase.desktop -t $out/share/applications
-      substituteInPlace $out/share/applications/hayase.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
-
-      install -Dm444 ${appimageContents}/hayase.png \
-        $out/share/icons/hicolor/512x512/apps/hayase.png
-    '';
-
-    meta = with lib; {
-      description = "Stream anime torrents instantly, real-time with no waiting for downloads to finish";
-      homepage = "https://hayase.watch";
-      license = licenses.bsl11;
-      mainProgram = "hayase";
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    };
-  }
+}
