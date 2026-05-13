@@ -5,11 +5,11 @@
 }:
 pkgs.appimageTools.wrapType2 rec {
   pname = "hayase";
-  version = "6.4.65";
+  version = "6.4.67";
 
   src = pkgs.fetchurl {
     url = "https://api.hayase.watch/files/linux-hayase-${version}-linux.AppImage";
-    hash = "sha256-hgGlP9gzF+Wa4opJcxrWSKmoTfjv/IGwgd6lUotDL64=";
+    hash = "sha256-npUSNtiCKTcAK2nOta225W9+07Rsm235vsiAAAALVFU=";
   };
 
   nativeBuildInputs = with pkgs; [
